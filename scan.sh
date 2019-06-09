@@ -8,7 +8,7 @@
 # tesseract-ocr
 # tesseract-ocr-eng
 
-#TEMP_DIR=$(mktemp -d)
+TEMP_DIR=$(mktemp -d)
 PREFIX=$1
 
 if [ -z "${OUTPUT_DIR}" ]; then
@@ -16,14 +16,13 @@ if [ -z "${OUTPUT_DIR}" ]; then
 fi
 
 # UNCOMMENT FOR TESTING
-mkdir processed
-cp *.pbm processed/
-TEMP_DIR=`pwd`/processed
+#mkdir processed
+#TEMP_DIR=`pwd`/processed
 echo "Temp dir: $TEMP_DIR"
 echo "Output dir: $OUTPUT_DIR"
 
 # Scan the document
-#scanadf -o $TEMP_DIR/$PREFIX-%d.pbm --source "Automatic Document Feeder(left aligned,Duplex)" --mode "24 bit Color" 
+scanadf -o $TEMP_DIR/$PREFIX-%d.pbm --source "Automatic Document Feeder(left aligned,Duplex)" --mode "24 bit Color" 
 
 # Convert to PNG and rotate 180
 find $TEMP_DIR -name "$PREFIX-*.pbm" \
