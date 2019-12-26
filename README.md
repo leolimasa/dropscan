@@ -3,23 +3,13 @@ This ONLY works with the ADS-2700W scanner so far, and only on USB.
 
 # Setup
 
-## All Platforms: 
-
-Build the image:
-
-```
-docker build -t dropscan .
-```
-
-Then add the appropriate `bin/dropscan_*` command to your path.
-
 ## Mac OS
 
 We need to forward the USB from the Mac to the Docker container. To do that we run docker inside virtualbox with USB forwarding:
 
 1. Install virtual box
 1. Install the virtual box extension pack
-1. Run setup_docker_machine.sh
+1. Run setup_mac.sh
 
 See https://christopherjmcclellan.wordpress.com/2019/04/21/using-usb-with-docker-for-mac/#tldr for more info.
 
@@ -45,6 +35,12 @@ If running mac, first do a `setup_docker_machine` then `eval $(docker-machine en
 
 ```
 docker run -i -t dropscan:latest /bin/bash
+```
+
+## To build the image
+
+```
+docker build -t dropscan .
 ```
 
 # Gotchas
