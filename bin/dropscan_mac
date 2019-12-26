@@ -35,4 +35,9 @@ if [ -z "${DEVNAME}" ]; then
   exit
 fi
 
-docker run --device $DEVNAME -e PREFIX=$1 -e OUTPUT_DIR=$PWD -v $PWD:$PWD dropscan:latest
+# Sets the output dir to current directory if not set
+if [ -z "${OUTPUT_DIR}" ]; then
+  OUTPUT_DIR=$PWD
+fi
+
+docker run --device $DEVNAME -e PREFIX=$1 -e OUTPUT_DIR=$OUTPUT_DIR -v $OUTPUT_DIR:$OUTPUT_DIR dropscan:latest

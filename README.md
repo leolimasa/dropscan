@@ -13,6 +13,14 @@ We need to forward the USB from the Mac to the Docker container. To do that we r
 
 See https://christopherjmcclellan.wordpress.com/2019/04/21/using-usb-with-docker-for-mac/#tldr for more info.
 
+### Finder shortcut
+
+You can add a shortcut to finder to scan documents. Create a new `Run Shell Script` automator service with the following parameters:
+
+* **Workflow receives current**: folders
+* **Pass input:** as arguments
+* **Script:** PATH_TO_DROPSCAN/bin/dropscan_mac_automator $1
+
 # Usage
 
 ## Platform specific command
