@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Ensure the docker machine is running
+if [ -z "${MACHINE_NAME}" ]; then
+  MACHINE_NAME="dockerdefault"
+fi
+eval $(docker-machine env $MACHINE_NAME)
+if [ -z "${DOCKER_HOST}" ]; then
+  echo "Docker machine not set. Run setup_mac.sh."
+  exit
+fi
+
+# Identify the USB device from inside the docker machine
+# See https://unix.stackexchange.com/questions/144029/command-to-determine-ports-of-a-device-like-dev-ttyusb0
+
+# Line by line explanation:
+# * Finds all usb devices ("dev" files in /sys/bus/usb/devices/usb*) and strips the "dev" from the path
+# * Passes thoses paths to udevadm and returns DEVNAME and ID_SERIAL for each, one in each line for all devices
+# * Combines DEVNAME and ID_SERIAL into one line
+# * Finds only the line that has Brother in it
+# * Grabs only the first column with the DEVNAME
+# * Removes the DEVNAME= prefix so we only have the device path
+DEVNAME=$(docker-machine ssh dockerdefault <<EOF
+  find /sys/bus/usb/devices/usb*/ -name dev | rev | cut -c 4- | rev | \
+  xargs -I {} sh -c "udevadm info -q property -p {} | grep DEVNAME; udevadm info -q property -p {} | grep ID_SERIAL=" | \
+  sed '$!N;s/\n/ /' | \
+  grep Brother | \
+  awk '{print \$1}' | \
+  awk -F= '{print \$2}'
+EOF
+)
+
+if [ -z "${DEVNAME}" ]; then
+  echo "No scanner detected. Ensure the scanner is plugged in, and the docker virtual machine is running."
+  exit
+fi
+
+docker run --device $DEVNAME -e PREFIX=$1 -e OUTPUT_DIR=$PWD -v $PWD:$PWD dropscan:latest

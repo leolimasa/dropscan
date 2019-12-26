@@ -9,7 +9,15 @@
 # tesseract-ocr-eng
 
 TEMP_DIR=$(mktemp -d)
-PREFIX=$1
+
+if [ -z "${PREFIX}" ]; then
+  PREFIX=$1
+fi
+
+if [ -z "${PREFIX}" ]; then
+  echo "No prefix (file name) detected. Type in a prefix as the first argument."
+  exit
+fi
 
 if [ -z "${OUTPUT_DIR}" ]; then
   OUTPUT_DIR=`pwd`
