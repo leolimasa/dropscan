@@ -6,8 +6,8 @@ if [ -z "${MACHINE_NAME}" ]; then
 fi
 eval $(docker-machine env $MACHINE_NAME)
 if [ -z "${DOCKER_HOST}" ]; then
-  echo "Docker machine not set. Run setup_mac.sh."
-  exit
+  echo "Docker machine not detected. Trying to start it."
+  docker-machine start $MACHINE_NAME
 fi
 
 # Identify the USB device from inside the docker machine
